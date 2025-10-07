@@ -1,0 +1,52 @@
+			task 2 		
+
+first e console cable connect korte hobe between PC3 - R4 
+then PC3 -> desktop -> terminal -> ok -> then baki commands  
+Router>en
+Router#conf t 
+Router(config)#hostname R4
+R4(config)#enable secret final 
+
+			task 3
+PC1 er -> desktop -> ip configuration setup 
+R1>en
+R1#conf t 
+R1(config)#int se0/0/0
+R1(config-if)#ip address 192.168.46.10 255.255.255.252 
+R1(config-if)#no shutdown 
+R1(config-if)#exit
+
+			task 5 
+
+R5>en
+R5#conf t 
+R5(config)#ip dhcp excluded-address 192.168.40.1 192.168.40.5
+R5(config)#ip dhcp pool R2-LAN2
+R5(dhcp-config)#network 192.168.40.0 255.255.252.0 
+R5(dhcp-config)#dns-server 192.168.16.2 
+R5(dhcp-config)#default-router 192.168.40.1
+R5(dhcp-config)#exit 
+
+R2>en 
+R2#conf t 
+R2(config)#int fa0/1 
+R2(config-if)#ip helper-address 192.168.46.18
+
+then pc4 er ip configuration dite hobe 
+
+			task 6
+
+R5(config)#ip access-list standard JaoList 
+R5(config-std-nacl)#permit 192.168.16.0 0.0.15.255
+R5(config-std-nacl)#permit 192.168.32.0 0.0.7.255
+R5(config-std-nacl)#permit 192.168.40.0 0.0.3.255
+R5(config-std-nacl)#permit 192.168.44.0 0.0.1.255
+R5(config-std-nacl)#ip nat inside source list JaoList pool GhumPool overload
+R5(config)#int se0/0/1
+R5(config-if)#ip nat inside 
+R5(config-if)#exit 
+R5(config)#int se0/0/0 
+R5(config-if)#ip nat outside 
+R5(config-if)#exit 
+R5(config)#ip nat inside source static 192.168.16.3 200.0.0.1
+
